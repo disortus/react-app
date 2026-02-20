@@ -104,7 +104,8 @@ react-app/
 Минимум 2 переиспользуемых компонента:
 
 - `Header`
-- `Card` / `ListItem`
+- `Layout`
+- `Todos` / `TodoItem`
 - `Button`
 
 Особенности:
