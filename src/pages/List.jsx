@@ -1,45 +1,65 @@
 import { useState, useEffect } from "react";
+import { todoData } from "../assets/data";
 import ListItem from "../components/ListItem";
-import Button from "../components/Button";
+import CreateTodo from "../components/CreateTodo";
 
 function List() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchTasks = async () => {
+  const fetchTasks = () => {
     setLoading(true);
     setError(null);
-    try {
-      const response = await fetch("https://jsonplaceholder.typicode.com/todos?_limit=10");
-      if (!response.ok) {
-        throw new Error("Failed to fetch tasks");
+    
+    setTimeout(() => {
+      try {
+        if (Math.random() > 0.98) {
+          throw new Error("Temporary network glitch");
+        }
+        setTasks(todoData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-      const data = await response.json();
-      setTasks(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+    }, 500);
   };
 
   useEffect(() => {
     fetchTasks();
   }, []);
 
+  const addTask = (title) => {
+    const newTask = {
+      id: Date.now(),
+      title,
+      completed: false
+    };
+    setTasks([newTask, ...tasks]);
+  };
+
+  const toggleTask = (id) => {
+    setTasks(tasks.map(task => 
+      task.id === id ? { ...task, completed: !task.completed } : task
+    ));
+  };
+
+  const removeTask = (id) => {
+    setTasks(tasks.filter(task => task.id !== id));
+  };
+
   return (
-    <div className="max-w-2xl mx-auto px-4 pb-12">
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold">Todo List</h2>
-        <Button onClick={fetchTasks} className="bg-zinc-700 hover:bg-zinc-600">
-          Refresh Data
-        </Button>
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <h2 className="text-3xl font-bold text-pink-400">My Tasks</h2>
       </div>
+
+      <CreateTodo onAdd={addTask} />
 
       {loading && (
         <div className="flex flex-col items-center justify-center py-20 space-y-4">
-          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-12 h-12 border-4 border-pink-400 border-t-transparent rounded-full animate-spin"></div>
           <p className="text-zinc-400 font-medium">Loading tasks...</p>
         </div>
       )}
@@ -54,10 +74,21 @@ function List() {
       )}
 
       {!loading && !error && (
-        <div className="space-y-3">
-          {tasks.map((task) => (
-            <ListItem key={task.id} item={task} />
-          ))}
+        <div className="grid gap-4">
+          {tasks.length > 0 ? (
+            tasks.map((task) => (
+              <ListItem 
+                key={task.id} 
+                item={task} 
+                onToggle={toggleTask} 
+                onDelete={removeTask}
+              />
+            ))
+          ) : (
+            <div className="text-center py-10 text-zinc-500">
+              <p>No tasks yet. Add one above!</p>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -65,3 +96,4 @@ function List() {
 }
 
 export default List;
+
