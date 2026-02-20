@@ -25,9 +25,9 @@ function CreateTodo({ onAdd }) {
       />
       <button
         type="submit"
-        className="ml-3 p-2 rounded-xl bg-pink-400 text-zinc-900 hover:bg-pink-300 transition-colors duration-300"
+        className="ml-3 p-2 rounded-xl bg-pink-400 text-zinc-400 hover:bg-pink-300 transition-colors duration-300"
       >
-        <BsPlusLg size={20} />
+        <BsPlusLg size={20} className=""/>
       </button>
     </form>
   );

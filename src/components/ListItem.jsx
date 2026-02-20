@@ -23,11 +23,11 @@ function ListItem({ item, onToggle, onDelete }) {
           e.stopPropagation();
           onDelete(item.id);
         }}
-        className="opacity-0 group-hover:opacity-100 p-2 hover:bg-zinc-700 rounded-xl transition-all duration-300"
+        className="group-hover:opacity-100 p-2 hover:bg-zinc-700 rounded-xl transition-all duration-500"
       >
         <BsTrashFill
           size={20}
-          className="text-zinc-500 hover:text-rose-400 transition-colors"
+          className="text-zinc-500 hover:text-rose-400 transition-colors ease-in-out duration-500"
         />
       </button>
     </div>
