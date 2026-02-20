@@ -9,16 +9,22 @@ function TodoItem(props) {
       className="flex items-center justify-between mb-4 rounded-2xl bg-zinc-800 p-5 w-full"
       onClick={() => props.changeTodo(props.todo.id)}
     >
-      <button className="flex items-center">
+      <div className="flex items-center">
         <Check isComplite={props.todo.isComplite} />
         <span className={cn({ "line-through": props.todo.isComplite })}>
           {props.todo.title}
         </span>
-      </button>
-      <button onClick={props.removeTodo(todo.id)}>
+      </div>
+
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          props.removeTodo(props.todo.id);
+        }}
+      >
         <BsTrashFill
           size={22}
-          className="text-zinc-600 hover:text-rose-400 transition-colors ease-in-out duration-300"
+          className="text-zinc-600 hover:text-rose-400 transition-colors duration-300"
         />
       </button>
     </div>
